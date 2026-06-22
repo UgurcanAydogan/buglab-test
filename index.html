@@ -1,1 +1,124 @@
-<!DOCTYPE html> <html> <head> <meta charset="utf-8"> <style>   body { font-family: Georgia, serif; margin: 0; background: #ffffff; color: #222; line-height: 1.6; }   header { background: #1a2b4c; padding: 24px 32px; }   nav a { color: #c8d4e8; margin-right: 20px; text-decoration: none; font-size: 15px; }   .hero { padding: 60px 32px; background: #f5f5f5; }   .hero h1 { font-size: 44px; margin: 0 0 16px; }   .hero p.tagline { color: #cfcfcf; background: #ffffff; font-size: 20px; }   .content { max-width: 720px; margin: 0 auto; padding: 48px 32px; }   .card { border: 1px solid #ddd; border-radius: 8px; padding: 24px; margin-bottom: 24px; }   .icon-btn { display: inline-block; width: 20px; height: 20px; background: #1a2b4c; border-radius: 4px; text-align: center; color: white; line-height: 20px; font-size: 11px; cursor: pointer; border: none; }   footer { background: #1a2b4c; color: #aab; padding: 32px; margin-top: 48px; font-size: 14px; }   .btn { background: #1a2b4c; color: white; padding: 12px 24px; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; }   input, textarea { width: 100%; padding: 10px; margin: 8px 0 16px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 16px; }   label { font-weight: bold; display: block; margin-top: 8px; } </style> </head> <body> <header>   <nav>     <a href="/">Anasayfa</a>     <a href="/urunler">Ürünler</a>     <a href="/hakkimizda">Hakkımızda</a>     <a href="/var-olmayan-sayfa-xyz123">Blog</a>     <a href="https://bu-domain-kesinlikle-yok-12345xyz.com">Dış Kaynak</a>   </nav> </header> <section class="hero">   <h1>Akme Yazılım Çözümleri</h1>   <p class="tagline">İşletmeniz için modern, güvenilir ve hızlı yazılım hizmetleri sunuyoruz.</p>   <button class="btn">Hemen Başla</button> </section> <div class="content">   <h4>Hizmetlerimiz</h4>   <p>Akme olarak web geliştirme, mobil uygulama ve bulut çözümleri sunuyoruz. Deneyimli ekibimizle projelerinizi hayata geçiriyoruz.</p>   <div class="card">     <h3>Web Geliştirme</h3>     <img src="https://via.placeholder.com/300x150" width="300" height="150">     <p>Modern, responsive web siteleri tasarlıyoruz. <a href="/detay">Detaylı bilgi</a> için tıklayın.</p>   </div>   <div class="card">     <h3>İletişim Formu</h3>     <label>Adınız</label>     <input type="text" placeholder="Adınız Soyadınız">     <label>E-posta</label>     <input type="email" placeholder="ornek@email.com">     <label>Mesajınız</label>     <textarea rows="4" placeholder="Mesajınızı yazın"></textarea>     <button class="btn">Gönder</button>     <span class="icon-btn">i</span>   </div>   <div class="card">     <h3>Galeri</h3>     <img src="https://via.placeholder.com/200x100" width="200" height="100">     <img src="https://via.placeholder.com/50x50" alt="" width="50" height="50">   </div> </div> <footer>   <p>© 2026 Akme Yazılım. Tüm hakları saklıdır.</p>   <p>İletişim: info@akme-ornek.com | Tel: 0312 000 00 00</p> </footer> <script>   document.addEventListener('DOMContentLoaded', function() {     nonExistentFunction_buglab();   }); </script> </body> </html>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TestMarket — Online Alışveriş Platformu</title>
+<meta name="description" content="TestMarket ile binlerce ürünü keşfedin, güvenli ödeme ve hızlı teslimat ile alışverişin keyfini çıkarın.">
+<style>
+  body { font-family: system-ui, sans-serif; margin: 0; background: #fafafa; color: #1a1a1a; line-height: 1.6; }
+  header { background: #0d2137; padding: 20px 32px; display: flex; justify-content: space-between; align-items: center; }
+  header .logo { color: #fff; font-size: 22px; font-weight: 700; }
+  nav a { color: #b8c5d6; margin-left: 18px; text-decoration: none; font-size: 15px; }
+  .hero { padding: 56px 32px; background: linear-gradient(135deg, #0d2137, #1e3a5f); color: #fff; }
+  .hero h1 { font-size: 40px; margin: 0 0 12px; }
+  .hero p { font-size: 18px; color: #d0dae6; max-width: 600px; }
+  .muted-note { color: #9aa8b5; background: #fafafa; font-size: 13px; padding: 8px 32px; }
+  .content { max-width: 1000px; margin: 0 auto; padding: 40px 32px; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .product { border: 1px solid #e2e2e2; border-radius: 10px; padding: 18px; background: #fff; }
+  .product img { width: 100%; border-radius: 6px; }
+  .product h3 { font-size: 16px; margin: 12px 0 6px; }
+  .price { color: #0d7a3f; font-weight: 700; font-size: 18px; }
+  .btn { background: #0d7a3f; color: #fff; padding: 12px 24px; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; }
+  .btn-secondary { background: #0d2137; color: #fff; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; }
+  .tiny-link { font-size: 11px; color: #6a7785; }
+  form { background: #fff; border: 1px solid #e2e2e2; border-radius: 10px; padding: 24px; margin-top: 24px; }
+  label { font-weight: 600; display: block; margin: 12px 0 4px; }
+  input, textarea, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px; }
+  footer { background: #0d2137; padding: 32px; margin-top: 48px; }
+  footer p { color: #5a6875; font-size: 13px; margin: 4px 0; }
+  footer a { color: #7a8795; font-size: 13px; }
+  .icon-only { display: inline-block; width: 22px; height: 22px; background: #0d7a3f; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
+  .section-title { font-size: 26px; margin: 32px 0 16px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">TestMarket</div>
+  <nav>
+    <a href="#urunler">Ürünler</a>
+    <a href="#kampanyalar">Kampanyalar</a>
+    <a href="/hesabim">Hesabım</a>
+    <a href="/sepet-bulunmayan-sayfa-9988">Sepet</a>
+    <a href="https://bu-site-kesinlikle-yoktur-77654.com">Blog</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h1>Alışverişin Yeni Adresi</h1>
+  <p>Binlerce ürün, güvenli ödeme, hızlı teslimat. TestMarket ile aradığınız her şey bir tık uzağınızda.</p>
+  <button class="btn">Hemen Keşfet</button>
+</section>
+
+<p class="muted-note">Not: Tüm fiyatlara KDV dahildir. Kampanya koşulları için detaylı bilgiye bakınız.</p>
+
+<div class="content">
+
+  <h2 class="section-title" id="urunler">Öne Çıkan Ürünler</h2>
+  <div class="grid">
+    <div class="product">
+      <img src="https://via.placeholder.com/240x160" alt="Kablosuz kulaklık ürün görseli">
+      <h3>Kablosuz Kulaklık</h3>
+      <p class="price">₺499</p>
+      <button class="btn">Sepete Ekle</button>
+    </div>
+    <div class="product">
+      <img src="https://via.placeholder.com/240x160">
+      <h3>Akıllı Saat</h3>
+      <p class="price">₺1.299</p>
+      <button class="btn">Sepete Ekle</button>
+    </div>
+    <div class="product">
+      <img src="https://via.placeholder.com/240x160" alt="">
+      <h3>Bluetooth Hoparlör</h3>
+      <p class="price">₺799</p>
+      <button class="btn">Sepete Ekle</button>
+    </div>
+  </div>
+
+  <h4 class="section-title" id="kampanyalar">Kampanyalar</h4>
+  <p>Bu haftaya özel indirimleri kaçırmayın. Seçili ürünlerde %40'a varan fırsatlar.</p>
+
+  <h2 class="section-title">İletişim</h2>
+  <form>
+    <label for="ad">Ad Soyad</label>
+    <input type="text" id="ad" name="ad" placeholder="Adınız Soyadınız">
+
+    <label>E-posta Adresi</label>
+    <input type="email" name="eposta" placeholder="ornek@email.com">
+
+    <label for="konu">Konu</label>
+    <select id="konu" name="konu">
+      <option>Genel Soru</option>
+      <option>Sipariş Takibi</option>
+      <option>İade / Değişim</option>
+    </select>
+
+    <label for="mesaj">Mesajınız</label>
+    <textarea id="mesaj" name="mesaj" rows="4" placeholder="Mesajınızı yazın"></textarea>
+
+    <br><br>
+    <button type="submit" class="btn">Gönder</button>
+    <button class="btn-secondary">Temizle</button>
+    <span class="icon-only">?</span>
+  </form>
+
+</div>
+
+<footer>
+  <p>© 2026 TestMarket. Tüm hakları saklıdır.</p>
+  <p><a href="/gizlilik">Gizlilik Politikası</a> · <a href="/kosullar">Kullanım Koşulları</a></p>
+  <p class="tiny-link">Müşteri hizmetleri: destek@testmarket-ornek.com</p>
+</footer>
+
+<script>
+  document.querySelector('.btn').addEventListener('click', function() {
+    console.log('Keşfet tıklandı');
+  });
+  initializeAnalytics_tracker();
+</script>
+
+</body>
+</html>
