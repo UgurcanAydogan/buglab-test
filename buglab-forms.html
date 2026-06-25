@@ -31,12 +31,19 @@
 </head>
 <body>
   <header>
-    <span class="eyebrow">QA Explorer · Regression Fixture</span>
-    <h1>Forms &amp; Interaction Bug-Lab</h1>
-    <p>This page probes defects an automated scanner may NOT catch yet — use of color alone, missing field-group labels, wrong input types, missing expanded-state on disclosures, and a missing skip link — alongside correctly-built lookalikes that must not be flagged.</p>
-  </header>
+  <span class="eyebrow">QA Explorer · Regression Fixture</span>
+  <h1>Forms &amp; Interaction Bug-Lab</h1>
+  <p>This page probes defects an automated scanner may NOT catch yet — use of color alone, missing field-group labels, wrong input types, missing expanded-state on disclosures, and a missing skip link — alongside correctly-built lookalikes that must not be flagged.</p>
+  <nav aria-label="Primary">
+    <a href="#section-a">Color</a> ·
+    <a href="#section-b">Groups</a> ·
+    <a href="#section-c">Inputs</a> ·
+    <a href="#section-d">Disclosures</a> ·
+    <a href="#section-f">Required</a>
+  </nav>
+</header>
   <main>
-    <section>
+    <section id="section-a">
       <span class="eyebrow">Section A</span>
       <h2>Status conveyed by color only</h2>
       <p class="note">Candidate miss: meaning carried by color with no text/icon backup.</p>
@@ -49,7 +56,7 @@
       <p style="margin-top:14px"><span class="status-dot" style="background:var(--danger)"></span> <strong>Error:</strong> Server connection failed</p>
       <p><span class="status-dot" style="background:#1f9d55"></span> <strong>OK:</strong> Database connection healthy</p>
     </section>
-    <section>
+    <section id="section-b">
       <span class="eyebrow">Section B</span>
       <h2>Grouped choices — with and without a group label</h2>
       <p class="note">Candidate miss: a radio group with no fieldset/legend (group purpose lost to screen readers).</p>
@@ -63,7 +70,7 @@
         <label><input type="radio" name="freq" value="yearly"> Yearly</label>
       </fieldset>
     </section>
-    <section>
+    <section id="section-c">
       <span class="eyebrow">Section C</span>
       <h2>Input types and autocomplete</h2>
       <p class="note">Candidate miss: an email field typed as plain text (wrong keyboard/validation, no autocomplete).</p>
@@ -76,7 +83,7 @@
         <input type="email" id="email-right" name="work_email" autocomplete="email">
       </form>
     </section>
-    <section>
+    <section id="section-d">
       <span class="eyebrow">Section D</span>
       <h2>Expandable disclosures</h2>
       <p class="note">Candidate miss: a toggle that expands content but never declares aria-expanded state.</p>
@@ -97,7 +104,7 @@
       <p class="note">Candidate miss: this page has no "skip to main content" link as its first focusable element.</p>
       <p>If the scanner reports a missing skip-link / bypass-blocks mechanism, that is the intended finding for this section.</p>
     </section>
-    <section>
+    <section id="section-f">
       <span class="eyebrow">Section F</span>
       <h2>Required fields</h2>
       <p class="note">Candidate miss: a required field marked only with a red asterisk color, plus one form-less labeled input.</p>
