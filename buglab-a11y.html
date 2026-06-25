@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QA Explorer Bug-Lab — Accessibility Regression Page</title>
+  <meta name="description" content="A controlled accessibility regression fixture for QA Explorer. Contains deliberately seeded a11y defects alongside correct lookalike controls that must not be flagged.">
+  <style>
+    :root { --ink:#1c2330; --muted:#5b6472; --line:#dfe3ea; --bg:#f7f8fa; --card:#ffffff; --accent:#2f5fe0; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; color:var(--ink); background:var(--bg); line-height:1.55; }
+    header { background:var(--card); border-bottom:1px solid var(--line); padding:28px 24px; }
+    header p { color:var(--muted); margin:6px 0 0; max-width:60ch; }
+    main { max-width:920px; margin:0 auto; padding:28px 24px 64px; }
+    section { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:22px 24px; margin:20px 0; }
+    h2 { font-size:1.05rem; margin:0 0 4px; }
+    .eyebrow { font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); font-weight:700; }
+    .note { font-size:.85rem; color:var(--muted); margin:2px 0 16px; }
+    table { border-collapse:collapse; width:100%; margin:8px 0; }
+    td, th { border:1px solid var(--line); padding:8px 10px; text-align:left; font-size:.92rem; }
+    button, .btn { font:inherit; padding:9px 16px; border-radius:8px; border:1px solid var(--line); background:#eef1f6; cursor:pointer; }
+    .primary { background:var(--accent); color:#fff; border-color:var(--accent); }
+    label { display:block; font-size:.85rem; color:var(--muted); margin:12px 0 4px; }
+    input[type=text], input[type=email] { font:inherit; padding:8px 10px; border:1px solid var(--line); border-radius:8px; width:100%; max-width:340px; }
+    .row { display:flex; gap:12px; flex-wrap:wrap; }
+    footer { max-width:920px; margin:0 auto; padding:0 24px 48px; color:var(--muted); font-size:.82rem; }
+    /* deliberately low-contrast utility for the contrast bug (≈2.9:1) */
+    .faint-on-white { color:#a8b0bd; }
+  </style>
+</head>
+<body>
+  <header>
+    <span class="eyebrow">QA Explorer · Regression Fixture</span>
+    <h1>Accessibility Bug-Lab</h1>
+    <p>This page intentionally contains a mix of accessibility defects and correctly-built lookalike controls. It is used to verify the scanner finds real issues and does not raise false alarms on valid markup.</p>
+  </header>
+
+  <main>
+
+    <!-- ============ HEADING STRUCTURE ============ -->
+    <section>
+      <span class="eyebrow">Section A</span>
+      <h2>Heading structure</h2>
+      <p class="note">One real heading-skip below; the rest of the page keeps a sane order.</p>
+      <!-- BUG: ARIA heading skip — this acts as a level-4 heading right after an h2 (skips h3) -->
+      <div role="heading" aria-level="4">Quarterly summary (ARIA level 4, jumps from 2)</div>
+      <p>Body copy under the skipped heading.</p>
+    </section>
+
+    <!-- ============ ARIA ROLES ============ -->
+    <section>
+      <span class="eyebrow">Section B</span>
+      <h2>ARIA roles — named vs unnamed</h2>
+      <p class="note">Unnamed ARIA controls should be flagged; named ones must not be.</p>
+      <div class="row">
+        <!-- BUG: role=button with no accessible name -->
+        <span role="button" tabindex="0" class="btn"></span>
+        <!-- TRAP: role=button WITH aria-label — must NOT be flagged -->
+        <span role="button" tabindex="0" class="btn" aria-label="Open filters">⚙</span>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <!-- BUG: role=link with no name and no href -->
+        <span role="link" tabindex="0">  </span>
+        <!-- TRAP: role=link with name + href — must NOT be flagged -->
+        <a role="link" href="#section-c" aria-label="Jump to forms">Jump to forms</a>
+      </div>
+      <div style="margin-top:12px">
+        <!-- BUG: role=textbox with no accessible label -->
+        <div role="textbox" tabindex="0" contenteditable="true" style="border:1px solid var(--line);padding:8px;border-radius:8px;max-width:340px">&nbsp;</div>
+      </div>
+    </section>
+
+    <!-- ============ DUPLICATE IDS + BROKEN ARIA REF ============ -->
+    <section id="section-c">
+      <span class="eyebrow">Section C</span>
+      <h2>Duplicate ids and broken ARIA references</h2>
+      <p class="note">Two elements share an id; one ARIA reference points nowhere.</p>
+      <!-- BUG: duplicate id "panel-x" used twice -->
+      <div id="panel-x">First panel with id panel-x</div>
+      <div id="panel-x">Second panel with the SAME id panel-x</div>
+      <!-- BUG: aria-labelledby points to a non-existent id -->
+      <div aria-labelledby="does-not-exist-123" style="margin-top:10px">Region labelled by a missing id.</div>
+      <!-- TRAP: aria-describedby points to an element that DOES exist — must NOT be flagged -->
+      <p id="help-real">This help text really exists.</p>
+      <input type="text" aria-describedby="help-real" placeholder="Field described by real help">
+    </section>
+
+    <!-- ============ TABLES ============ -->
+    <section>
+      <span class="eyebrow">Section D</span>
+      <h2>Data tables — headers present vs missing</h2>
+      <p class="note">One real data table lacks header cells; a correct one and a layout table must not be flagged.</p>
+
+      <!-- BUG: data table (caption + ≥2x2) with NO <th> header cells -->
+      <table>
+        <caption>Monthly revenue (no header cells — bug)</caption>
+        <tr><td>January</td><td>1200</td></tr>
+        <tr><td>February</td><td>1450</td></tr>
+        <tr><td>March</td><td>1310</td></tr>
+      </table>
+
+      <!-- TRAP: correct data table WITH thead + th — must NOT be flagged -->
+      <table style="margin-top:14px">
+        <caption>Monthly visits (correct headers)</caption>
+        <thead><tr><th>Month</th><th>Visits</th></tr></thead>
+        <tbody>
+          <tr><td>January</td><td>3200</td></tr>
+          <tr><td>February</td><td>3850</td></tr>
+        </tbody>
+      </table>
+
+      <!-- TRAP: layout table (role=presentation) — must NOT be flagged even without th -->
+      <table role="presentation" style="margin-top:14px">
+        <tr><td>Logo cell</td><td>Nav cell</td></tr>
+        <tr><td>Sidebar</td><td>Content</td></tr>
+      </table>
+    </section>
+
+    <!-- ============ TABINDEX ============ -->
+    <section>
+      <span class="eyebrow">Section E</span>
+      <h2>Tab order</h2>
+      <p class="note">One positive tabindex (anti-pattern); valid 0 / -1 must not be flagged.</p>
+      <div class="row">
+        <!-- BUG: positive tabindex -->
+        <button type="button" tabindex="5">Positive tabindex 5 (bug)</button>
+        <!-- TRAP: tabindex 0 — valid, must NOT be flagged -->
+        <button type="button" tabindex="0">Tabindex 0 (valid)</button>
+        <!-- TRAP: tabindex -1 — valid, must NOT be flagged -->
+        <button type="button" tabindex="-1">Tabindex -1 (valid)</button>
+      </div>
+    </section>
+
+    <!-- ============ DEAD BUTTON ============ -->
+    <section>
+      <span class="eyebrow">Section F</span>
+      <h2>Buttons with and without an action</h2>
+      <p class="note">Note: the scanner only flags dead buttons on pages with NO scripts. This page intentionally has no &lt;script&gt;, so the dead button below should surface; the real-handler one must not.</p>
+      <div class="row">
+        <!-- BUG: dead button — named, type=button, not in a form, no handler, no href, page has no scripts -->
+        <button type="button">Explore now (no action — dead)</button>
+        <!-- TRAP: button with a real inline handler — must NOT be flagged as dead -->
+        <button type="button" onclick="this.textContent='Clicked'">Real handler (alive)</button>
+        <!-- TRAP: button that is actually a link — must NOT be flagged as dead -->
+        <a class="btn" href="#section-c" role="button">Link-as-button (alive)</a>
+      </div>
+    </section>
+
+    <!-- ============ IMAGES / ALT ============ -->
+    <section>
+      <span class="eyebrow">Section G</span>
+      <h2>Images and alt text</h2>
+      <p class="note">One image is missing its alt attribute entirely (bug). One uses empty alt for decoration (valid trap).</p>
+      <!-- BUG: img with NO alt attribute at all (alt === null) -->
+      <img src="https://placehold.co/120x80/png" width="120" height="80">
+      <!-- TRAP: decorative image with intentional empty alt="" — must NOT be flagged as missing -->
+      <img src="https://placehold.co/120x80/png" alt="" width="120" height="80">
+    </section>
+
+    <!-- ============ FORM CONTROL LABELS ============ -->
+    <section>
+      <span class="eyebrow">Section H</span>
+      <h2>Form control labels</h2>
+      <p class="note">One input has only a placeholder (not a real label — bug); one has a proper &lt;label for&gt; (valid trap).</p>
+      <!-- BUG: input with placeholder only, no programmatic label -->
+      <input type="text" placeholder="Search (placeholder is not a label)">
+      <!-- TRAP: input with a proper label[for] — must NOT be flagged -->
+      <label for="city-real">City</label>
+      <input type="text" id="city-real" name="city">
+    </section>
+
+    <!-- ============ CONTRAST ============ -->
+    <section>
+      <span class="eyebrow">Section I</span>
+      <h2>Color contrast</h2>
+      <p class="note">One line is below the WCAG 4.5:1 minimum (bug); normal body text passes.</p>
+      <!-- BUG: low-contrast text (#a8b0bd on white ≈ 2.9:1) -->
+      <p class="faint-on-white">This faint grey line is hard to read against white (below 4.5:1).</p>
+      <!-- TRAP: normal dark text — passes -->
+      <p>This normal paragraph has strong contrast and should pass.</p>
+    </section>
+
+  </main>
+
+  <footer>
+    QA Explorer regression fixture · Section A–I · controlled a11y defects + lookalike traps.
+  </footer>
+</body>
+</html>
