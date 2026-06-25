@@ -97,6 +97,12 @@
         Return policy (proper aria-expanded)
       </button>
       <div id="ret-panel" class="accordion-body" hidden>Returns accepted within 30 days.</div>
+      <!-- BUG: real <button> disclosure, has aria-controls to an existing panel but NO aria-expanded -->
+      <button type="button" aria-controls="faq-panel"
+        onclick="document.getElementById('faq-panel').hidden = !document.getElementById('faq-panel').hidden;">
+        FAQ (button toggle — missing aria-expanded)
+      </button>
+      <div id="faq-panel" class="accordion-body" hidden>Frequently asked questions content.</div>
     </section>
     <section>
       <span class="eyebrow">Section E</span>
