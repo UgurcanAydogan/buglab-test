@@ -3,187 +3,162 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>QA Explorer Bug-Lab — Accessibility Regression Page</title>
-  <meta name="description" content="A controlled accessibility regression fixture for QA Explorer. Contains deliberately seeded a11y defects alongside correct lookalike controls that must not be flagged.">
+  <title>QA Explorer Bug-Lab — Forms & Interaction Regression Page</title>
+  <meta name="description" content="A controlled forms and interaction regression fixture for QA Explorer, probing defects an automated scanner may miss alongside correct lookalike controls.">
   <style>
-    :root { --ink:#1c2330; --muted:#5b6472; --line:#dfe3ea; --bg:#f7f8fa; --card:#ffffff; --accent:#2f5fe0; }
+    :root { --ink:#1c2330; --muted:#5b6472; --line:#dfe3ea; --bg:#f7f8fa; --card:#ffffff; --accent:#2f5fe0; --danger:#d23b3b; }
     * { box-sizing:border-box; }
     body { margin:0; font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; color:var(--ink); background:var(--bg); line-height:1.55; }
     header { background:var(--card); border-bottom:1px solid var(--line); padding:28px 24px; }
-    header p { color:var(--muted); margin:6px 0 0; max-width:60ch; }
+    header p { color:var(--muted); margin:6px 0 0; max-width:62ch; }
     main { max-width:920px; margin:0 auto; padding:28px 24px 64px; }
     section { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:22px 24px; margin:20px 0; }
     h2 { font-size:1.05rem; margin:0 0 4px; }
     .eyebrow { font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); font-weight:700; }
     .note { font-size:.85rem; color:var(--muted); margin:2px 0 16px; }
-    table { border-collapse:collapse; width:100%; margin:8px 0; }
-    td, th { border:1px solid var(--line); padding:8px 10px; text-align:left; font-size:.92rem; }
+    label { display:block; font-size:.85rem; color:var(--ink); margin:12px 0 4px; }
+    input, select, textarea { font:inherit; padding:8px 10px; border:1px solid var(--line); border-radius:8px; width:100%; max-width:340px; }
+    fieldset { border:1px solid var(--line); border-radius:8px; margin:12px 0; padding:12px 14px; }
     button, .btn { font:inherit; padding:9px 16px; border-radius:8px; border:1px solid var(--line); background:#eef1f6; cursor:pointer; }
-    .primary { background:var(--accent); color:#fff; border-color:var(--accent); }
-    label { display:block; font-size:.85rem; color:var(--muted); margin:12px 0 4px; }
-    input[type=text], input[type=email] { font:inherit; padding:8px 10px; border:1px solid var(--line); border-radius:8px; width:100%; max-width:340px; }
-    .row { display:flex; gap:12px; flex-wrap:wrap; }
+    .accordion-head { display:flex; justify-content:space-between; align-items:center; cursor:pointer; padding:10px 12px; border:1px solid var(--line); border-radius:8px; background:#f1f4f9; }
+    .accordion-body { padding:10px 12px; }
+    .row { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
     footer { max-width:920px; margin:0 auto; padding:0 24px 48px; color:var(--muted); font-size:.82rem; }
-    /* deliberately low-contrast utility for the contrast bug (≈2.9:1) */
-    .faint-on-white { color:#a8b0bd; }
+    /* color-only status markers (the "use of color" bug) */
+    .status-dot { display:inline-block; width:12px; height:12px; border-radius:50%; }
+    .err-red { color:var(--danger); }        /* error conveyed by color alone */
+    .ok-green { color:#1f9d55; }
   </style>
 </head>
 <body>
   <header>
     <span class="eyebrow">QA Explorer · Regression Fixture</span>
-    <h1>Accessibility Bug-Lab</h1>
-    <p>This page intentionally contains a mix of accessibility defects and correctly-built lookalike controls. It is used to verify the scanner finds real issues and does not raise false alarms on valid markup.</p>
+    <h1>Forms &amp; Interaction Bug-Lab</h1>
+    <p>This page probes defects an automated scanner may NOT catch yet — use of color alone, missing field-group labels, wrong input types, missing expanded-state on disclosures, and a missing skip link — alongside correctly-built lookalikes that must not be flagged.</p>
+
+    <!-- BUG (Section E): a real nav with multiple links exists, but there is NO skip link
+         as the first focusable element to bypass it (WCAG 2.4.1). -->
+    <nav aria-label="Primary">
+      <a href="#section-a">Color</a> ·
+      <a href="#section-b">Groups</a> ·
+      <a href="#section-c">Inputs</a> ·
+      <a href="#section-d">Disclosures</a> ·
+      <a href="#section-f">Required</a>
+    </nav>
   </header>
 
   <main>
 
-    <!-- ============ HEADING STRUCTURE ============ -->
-    <section>
+    <!-- ============ A. USE OF COLOR ALONE (WCAG 1.4.1) ============ -->
+    <section id="section-a">
       <span class="eyebrow">Section A</span>
-      <h2>Heading structure</h2>
-      <p class="note">One real heading-skip below; the rest of the page keeps a sane order.</p>
-      <!-- BUG: ARIA heading skip — this acts as a level-4 heading right after an h2 (skips h3) -->
-      <div role="heading" aria-level="4">Quarterly summary (ARIA level 4, jumps from 2)</div>
-      <p>Body copy under the skipped heading.</p>
-    </section>
+      <h2>Status conveyed by color only</h2>
+      <p class="note">Candidate miss: meaning carried by color with no text/icon backup.</p>
 
-    <!-- ============ ARIA ROLES ============ -->
-    <section>
-      <span class="eyebrow">Section B</span>
-      <h2>ARIA roles — named vs unnamed</h2>
-      <p class="note">Unnamed ARIA controls should be flagged; named ones must not be.</p>
+      <!-- BUG: status shown ONLY via color (red text / green text), no words or icons -->
+      <p class="err-red">●●● Server connection</p>
+      <p class="ok-green">●●● Database connection</p>
       <div class="row">
-        <!-- BUG: role=button with no accessible name -->
-        <span role="button" tabindex="0" class="btn"></span>
-        <!-- TRAP: role=button WITH aria-label — must NOT be flagged -->
-        <span role="button" tabindex="0" class="btn" aria-label="Open filters">⚙</span>
+        <span class="status-dot err-red" style="background:var(--danger)"></span>
+        <span class="status-dot ok-green" style="background:#1f9d55"></span>
       </div>
-      <div class="row" style="margin-top:12px">
-        <!-- BUG: role=link with no name and no href -->
-        <span role="link" tabindex="0">  </span>
-        <!-- TRAP: role=link with name + href — must NOT be flagged -->
-        <a role="link" href="#section-c" aria-label="Jump to forms">Jump to forms</a>
-      </div>
-      <div style="margin-top:12px">
-        <!-- BUG: role=textbox with no accessible label -->
-        <div role="textbox" tabindex="0" contenteditable="true" style="border:1px solid var(--line);padding:8px;border-radius:8px;max-width:340px">&nbsp;</div>
-      </div>
+
+      <!-- TRAP: same status but with TEXT label alongside color — must NOT be flagged -->
+      <p style="margin-top:14px"><span class="status-dot" style="background:var(--danger)"></span> <strong>Error:</strong> Server connection failed</p>
+      <p><span class="status-dot" style="background:#1f9d55"></span> <strong>OK:</strong> Database connection healthy</p>
     </section>
 
-    <!-- ============ DUPLICATE IDS + BROKEN ARIA REF ============ -->
+    <!-- ============ B. FIELDSET / LEGEND (WCAG 1.3.1) ============ -->
+    <section id="section-b">
+      <span class="eyebrow">Section B</span>
+      <h2>Grouped choices — with and without a group label</h2>
+      <p class="note">Candidate miss: a radio group with no fieldset/legend (group purpose lost to screen readers).</p>
+
+      <!-- BUG: radio group with NO fieldset/legend wrapping -->
+      <p>Preferred contact method:</p>
+      <label><input type="radio" name="contact1" value="email"> Email</label>
+      <label><input type="radio" name="contact1" value="phone"> Phone</label>
+      <label><input type="radio" name="contact1" value="sms"> SMS</label>
+
+      <!-- TRAP: radio group WITH fieldset + legend — must NOT be flagged -->
+      <fieldset>
+        <legend>Billing frequency</legend>
+        <label><input type="radio" name="freq" value="monthly"> Monthly</label>
+        <label><input type="radio" name="freq" value="yearly"> Yearly</label>
+      </fieldset>
+    </section>
+
+    <!-- ============ C. WRONG INPUT TYPE (WCAG 1.3.5) ============ -->
     <section id="section-c">
       <span class="eyebrow">Section C</span>
-      <h2>Duplicate ids and broken ARIA references</h2>
-      <p class="note">Two elements share an id; one ARIA reference points nowhere.</p>
-      <!-- BUG: duplicate id "panel-x" used twice -->
-      <div id="panel-x">First panel with id panel-x</div>
-      <div id="panel-x">Second panel with the SAME id panel-x</div>
-      <!-- BUG: aria-labelledby points to a non-existent id -->
-      <div aria-labelledby="does-not-exist-123" style="margin-top:10px">Region labelled by a missing id.</div>
-      <!-- TRAP: aria-describedby points to an element that DOES exist — must NOT be flagged -->
-      <p id="help-real">This help text really exists.</p>
-      <input type="text" aria-describedby="help-real" placeholder="Field described by real help">
+      <h2>Input types and autocomplete</h2>
+      <p class="note">Candidate miss: an email field typed as plain text (wrong keyboard/validation, no autocomplete).</p>
+
+      <form>
+        <!-- BUG: email field declared as type=text, no autocomplete -->
+        <label for="email-wrong">Email address</label>
+        <input type="text" id="email-wrong" name="email" placeholder="you@example.com">
+
+        <!-- BUG: telephone field as plain text, no autocomplete=tel -->
+        <label for="tel-wrong">Phone number</label>
+        <input type="text" id="tel-wrong" name="phone">
+
+        <!-- TRAP: correct email input with type=email + autocomplete — must NOT be flagged -->
+        <label for="email-right">Work email</label>
+        <input type="email" id="email-right" name="work_email" autocomplete="email">
+      </form>
     </section>
 
-    <!-- ============ TABLES ============ -->
-    <section>
+    <!-- ============ D. DISCLOSURE / ARIA-EXPANDED (WCAG 4.1.2) ============ -->
+    <section id="section-d">
       <span class="eyebrow">Section D</span>
-      <h2>Data tables — headers present vs missing</h2>
-      <p class="note">One real data table lacks header cells; a correct one and a layout table must not be flagged.</p>
+      <h2>Expandable disclosures</h2>
+      <p class="note">Candidate miss: a toggle that expands content but never declares aria-expanded state.</p>
 
-      <!-- BUG: data table (caption + ≥2x2) with NO <th> header cells -->
-      <table>
-        <caption>Monthly revenue (no header cells — bug)</caption>
-        <tr><td>January</td><td>1200</td></tr>
-        <tr><td>February</td><td>1450</td></tr>
-        <tr><td>March</td><td>1310</td></tr>
-      </table>
+      <!-- BUG: accordion toggle with NO aria-expanded / no button semantics -->
+      <div class="accordion-head" onclick="this.nextElementSibling.hidden = !this.nextElementSibling.hidden">
+        <span>Shipping details (toggle — no aria-expanded)</span>
+        <span>▾</span>
+      </div>
+      <div class="accordion-body" hidden>Ships in 3–5 business days.</div>
 
-      <!-- TRAP: correct data table WITH thead + th — must NOT be flagged -->
-      <table style="margin-top:14px">
-        <caption>Monthly visits (correct headers)</caption>
-        <thead><tr><th>Month</th><th>Visits</th></tr></thead>
-        <tbody>
-          <tr><td>January</td><td>3200</td></tr>
-          <tr><td>February</td><td>3850</td></tr>
-        </tbody>
-      </table>
-
-      <!-- TRAP: layout table (role=presentation) — must NOT be flagged even without th -->
-      <table role="presentation" style="margin-top:14px">
-        <tr><td>Logo cell</td><td>Nav cell</td></tr>
-        <tr><td>Sidebar</td><td>Content</td></tr>
-      </table>
+      <!-- TRAP: proper disclosure button WITH aria-expanded — must NOT be flagged -->
+      <button type="button" aria-expanded="false" aria-controls="ret-panel"
+        onclick="const e=this.getAttribute('aria-expanded')==='true'; this.setAttribute('aria-expanded', String(!e)); document.getElementById('ret-panel').hidden = e;">
+        Return policy (proper aria-expanded)
+      </button>
+      <div id="ret-panel" class="accordion-body" hidden>Returns accepted within 30 days.</div>
     </section>
 
-    <!-- ============ TABINDEX ============ -->
+    <!-- ============ E. SKIP LINK (WCAG 2.4.1) ============ -->
     <section>
       <span class="eyebrow">Section E</span>
-      <h2>Tab order</h2>
-      <p class="note">One positive tabindex (anti-pattern); valid 0 / -1 must not be flagged.</p>
-      <div class="row">
-        <!-- BUG: positive tabindex -->
-        <button type="button" tabindex="5">Positive tabindex 5 (bug)</button>
-        <!-- TRAP: tabindex 0 — valid, must NOT be flagged -->
-        <button type="button" tabindex="0">Tabindex 0 (valid)</button>
-        <!-- TRAP: tabindex -1 — valid, must NOT be flagged -->
-        <button type="button" tabindex="-1">Tabindex -1 (valid)</button>
-      </div>
+      <h2>Bypass blocks</h2>
+      <p class="note">Candidate miss: this page has no "skip to main content" link as its first focusable element. (Whole-page property — there is no in-page trap for this one; either the scanner checks for a skip link or it does not.)</p>
+      <p>If the scanner reports a missing skip-link / bypass-blocks mechanism, that is the intended finding for this section.</p>
     </section>
 
-    <!-- ============ DEAD BUTTON ============ -->
-    <section>
+    <!-- ============ F. REQUIRED FIELD WITHOUT INDICATION ============ -->
+    <section id="section-f">
       <span class="eyebrow">Section F</span>
-      <h2>Buttons with and without an action</h2>
-      <p class="note">Note: the scanner only flags dead buttons on pages with NO scripts. This page intentionally has no &lt;script&gt;, so the dead button below should surface; the real-handler one must not.</p>
-      <div class="row">
-        <!-- BUG: dead button — named, type=button, not in a form, no handler, no href, page has no scripts -->
-        <button type="button">Explore now (no action — dead)</button>
-        <!-- TRAP: button with a real inline handler — must NOT be flagged as dead -->
-        <button type="button" onclick="this.textContent='Clicked'">Real handler (alive)</button>
-        <!-- TRAP: button that is actually a link — must NOT be flagged as dead -->
-        <a class="btn" href="#section-c" role="button">Link-as-button (alive)</a>
-      </div>
-    </section>
+      <h2>Required fields</h2>
+      <p class="note">Candidate miss: a required field marked only with a red asterisk color, plus one form-less labeled input (also tests the form-scope fix once shipped).</p>
 
-    <!-- ============ IMAGES / ALT ============ -->
-    <section>
-      <span class="eyebrow">Section G</span>
-      <h2>Images and alt text</h2>
-      <p class="note">One image is missing its alt attribute entirely (bug). One uses empty alt for decoration (valid trap).</p>
-      <!-- BUG: img with NO alt attribute at all (alt === null) -->
-      <img src="https://placehold.co/120x80/png" width="120" height="80">
-      <!-- TRAP: decorative image with intentional empty alt="" — must NOT be flagged as missing -->
-      <img src="https://placehold.co/120x80/png" alt="" width="120" height="80">
-    </section>
+      <form>
+        <!-- BUG: required indicated by color-only asterisk, field itself not marked required -->
+        <label for="name-req"><span class="err-red">*</span> Full name</label>
+        <input type="text" id="name-req" name="full_name">
+      </form>
 
-    <!-- ============ FORM CONTROL LABELS ============ -->
-    <section>
-      <span class="eyebrow">Section H</span>
-      <h2>Form control labels</h2>
-      <p class="note">One input has only a placeholder (not a real label — bug); one has a proper &lt;label for&gt; (valid trap).</p>
-      <!-- BUG: input with placeholder only, no programmatic label -->
-      <input type="text" placeholder="Search (placeholder is not a label)">
-      <!-- TRAP: input with a proper label[for] — must NOT be flagged -->
-      <label for="city-real">City</label>
-      <input type="text" id="city-real" name="city">
-    </section>
-
-    <!-- ============ CONTRAST ============ -->
-    <section>
-      <span class="eyebrow">Section I</span>
-      <h2>Color contrast</h2>
-      <p class="note">One line is below the WCAG 4.5:1 minimum (bug); normal body text passes.</p>
-      <!-- BUG: low-contrast text (#a8b0bd on white ≈ 2.9:1) -->
-      <p class="faint-on-white">This faint grey line is hard to read against white (below 4.5:1).</p>
-      <!-- TRAP: normal dark text — passes -->
-      <p>This normal paragraph has strong contrast and should pass.</p>
+      <!-- form-less labeled input (post form-scope-fix this should be inspected and PASS — proper label) -->
+      <label for="search-free">Search</label>
+      <input type="text" id="search-free" name="q" placeholder="Type to search">
     </section>
 
   </main>
 
   <footer>
-    QA Explorer regression fixture · Section A–I · controlled a11y defects + lookalike traps.
+    QA Explorer regression fixture · Forms &amp; Interaction · Section A–F · candidate misses + lookalike traps.
   </footer>
 </body>
 </html>
